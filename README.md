@@ -11,7 +11,7 @@ Là sự kết hợp của nhiều kiểu thành một kiểu mới. Biến thu�
 5. Interface vs Type Alias
 Interface: Dùng để mô tả cấu trúc của một đối tượng. Có thể mở rộng bằng từ khóa extends.
 Type Alias: Dùng để đặt tên cho bất kỳ kiểu dữ liệu nào, không chỉ giới hạn ở đối tượng. Không thể mở rộng bằng extends, nhưng có thể kết hợp kiểu bằng &.
-6 Generics
+6. Generics
 Là một tính năng giúp tạo ra các kiểu dữ liệu tổng quát, linh hoạt mà vẫn đảm bảo tính an toàn về kiểu. Thay vì cố định kiểu dữ liệu, Generics cho phép sử dụng một tham số kiểu (), giúp code dễ tái sử dụng hơn.
 7.  Decorators
 Là một tính năng đặc biệt trong TypeScript (cần bật experimentalDecorators) giúp mở rộng chức năng của class, method, property, v.v.
