@@ -1,98 +1,46 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+1. Module trong NestJS là gì? Tại sao nó quan trọng
+- Trong NestJS, Module là một cách để tổ chức code thành các nhóm logic nhỏ, dễ quản lý. Một ứng dụng NestJS luôn có ít nhất một Module chính (AppModule), ngoài ra có thể có nhiều module con.
+- Quan trọng bởi vì: Chia nhỏ ứng dụng thành các phần dễ bảo trì, Tái sử dụng: Một module có thể import/export để dùng ở nơi khác, Quản lý dependency injection (DI): Module giúp kiểm soát các providers, controllers, services.
+2. Sự khác biệt giữa @Module(), @Global(), và @Injectable()
+  - @Module():	Định nghĩa một module trong NestJS.
+  - @Global():	Đánh dấu một module là global, để tất cả module khác có thể sử dụng mà không cần import.
+  - @Injectable():	Định nghĩa một service/provider, cho phép Dependency Injection.
+3. Trong NestJS, để chia sẻ providers (services, repositories, factories,...) giữa các module, bạn cần sử dụng imports và exports.
+4. Controller trong NestJS đóng vai trò gì:
+  - Controller là nơi xử lý HTTP request và trả về response.
+    + Chịu trách nhiệm nhận request từ client.
+    + Gọi services để xử lý business logic.
+    + Trả về response cho client.
+5. Cách sử dụng các decorator như @Get(), @Post(), @Param(), và @Body()
+  - @Get()	Định nghĩa route GET: lấy dữ liệu
+  - @Post()	Định nghĩa route POST: gửi dữ liệu
+  - @Param()	Lấy giá trị param từ URL
+  - @Body()	Lấy dữ liệu từ body của request
+6. Provider trong NestJS là gì? Có những loại provider nào.
+  - Là các service, repository, factory, v.v. dùng để chứa business logic. Được inject vào các controller hoặc provider khác.
+  - Các loại provider:
+    + Service	Dùng để xử lý logic nghiệp vụ.
+    + Repository	Làm việc với database.
+    + Factory	Dùng để tạo ra instance tùy chỉnh.
+7. Sự khác biệt giữa @Injectable() và @Inject()
+  - @Injectable():	Định nghĩa một class có thể dùng với Dependency Injection.
+  - @Inject():	Thay thế constructor injection nếu cần tên provider tùy chỉnh.
+8. Middleware là gì?
+  - Middleware trong NestJS là các function chạy trước khi request đến controller.
+  - Công dụng: Xác thực request, Log request, Thay đổi request trước khi đến Controller
+9. NestJS cung cấp những built-in middleware nào?
+  - CORS Middleware
+  - Compression Middleware
+  - Helmet Middleware
+  - Logger Middleware
+10. Dependency Injection (DI) là gì: 
+  - DI giúp quản lý các dependencies một cách tự động. NestJS sử dụng DI để tự động inject các services, repository, providers vào class khác.
+11. Lifecycle Hooks trong NestJS là gì?
+  - NestJS có các hook chạy theo vòng đời module/service:
+   + onModuleInit()
+   + onApplicationBootstrap()
+   + onModuleDestroy()
+   + onApplicationShutdown()
+12. ConfigModule là gì?
+ConfigModule là module dùng để quản lý biến môi trường (env).
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
