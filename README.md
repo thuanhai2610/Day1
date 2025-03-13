@@ -1,3 +1,5 @@
+/ Day3
+
 1. Module trong NestJS là gì? Tại sao nó quan trọng
 - Trong NestJS, Module là một cách để tổ chức code thành các nhóm logic nhỏ, dễ quản lý. Một ứng dụng NestJS luôn có ít nhất một Module chính (AppModule), ngoài ra có thể có nhiều module con.
 - Quan trọng bởi vì: Chia nhỏ ứng dụng thành các phần dễ bảo trì, Tái sử dụng: Một module có thể import/export để dùng ở nơi khác, Quản lý dependency injection (DI): Module giúp kiểm soát các providers, controllers, services.
