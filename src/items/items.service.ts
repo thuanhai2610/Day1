@@ -1,35 +1,45 @@
 import { Injectable, NotFoundException  } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Item, ItemDocument } from './schemas/item.schema';
 
-export interface Item {
-    id: number;
-    name: String;
-    description: String,
-}
 @Injectable()
 export class ItemsService {
+    constructor(@InjectModel(Item.name) private itemModel: Model<ItemDocument>) {}
     private items: Item[] = [];
-    findAll(): Item[] {
-        return this.items
+    async findAll(search?: string, page = 1, limit = 10) {
+        const filter = search ? { name : new RegExp(search, 'i')} : {};
+        const items = await this.itemModel.find(filter).limit(limit).skip((page - 1) * limit).exec();
+        const total = await this.itemModel.countDocuments(filter);
+        return {
+            items,
+            total,
+            page,
+            pages: Math.ceil(total / limit),
+        };
     }
-    findOne(id: number): Item{
-        const item = this.items.find((item) => item.id === id );
+    async findOne(id: string): Promise<ItemDocument>{
+        const item = await this.itemModel.findById( id ).exec();
         if (!item) throw new NotFoundException('Item not found');
         return item;
     }
-    create(name: String, description: string ): Item{
-        const newItem: Item = {id: Date.now(), name, description};
-        this.items.push(newItem)
-        return newItem;
-    } 
-    update(id: number, name: string, description: string): Item{
-        const itemIndex = this.items.findIndex((item) => item.id === id);
-        if (itemIndex === -1) throw new NotFoundException('Item not found')
-            this.items[itemIndex] = {id, name, description};
-        return this.items[itemIndex]
-    }
-    delete(id: number): void{
-        const itemIndex = this.items.findIndex((item) => item.id === id);
-        if (itemIndex === -1) throw new NotFoundException('Item not found')
-            this.items.splice(itemIndex, 1);
-    }
+    async create(name: string, description: string): Promise<ItemDocument> {
+        const newItem = new this.itemModel({ name, description });
+        return newItem.save();
+      }
+      async update(id: string, name: string, description: string): Promise<ItemDocument> {
+        const updatedItem = await this.itemModel.findByIdAndUpdate(
+          id,
+          { name, description },
+          { new: true, runValidators: true },
+        );
+        if (!updatedItem) throw new NotFoundException('Item not found');
+        return updatedItem;
+      }
+      async delete(id: string): Promise<void> {
+        const deletedItem = await this.itemModel.findByIdAndDelete(id).exec();
+        if (!deletedItem) throw new NotFoundException('Item not found');
+      }
+
+    
 }
